@@ -30,13 +30,11 @@ def getGoogleAddress(address):
 def getAddress(address):
     here = getHereAddress(address)
     if here:
-        here['Response']['View'][0]['Result'][0]['Location']['NavigationPosition'][0].update({'status':True})
         return here['Response']['View'][0]['Result'][0]['Location']['NavigationPosition'][0]
     google = getGoogleAddress(address)
     if google:
         return {'Latitude':google['results'][0]['geometry']['location']['lat'],\
-         'Longitude':google['results'][0]['geometry']['location']['lng'],\
-         'status':True}
+         'Longitude':google['results'][0]['geometry']['location']['lng']}
     return False
  
 class HTTPRequestHandler(BaseHTTPRequestHandler):
