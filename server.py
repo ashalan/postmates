@@ -51,7 +51,6 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_response(400, 'Bad Request: address does not exist')
         self.send_header('Content-Type', 'application/json')
         self.end_headers()
-        self.wfile.write(address)
     else:
       self.send_response(403)
       self.send_header('Content-Type', 'application/json')
