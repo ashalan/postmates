@@ -17,11 +17,26 @@ def getHereAddress(address):
         return False
     return here
 
+def getGoogleAddress(address):
+    params = urllib.urlencode({\
+     'key': settings.GOOGLE,\
+      'address': address})
+    f = urllib.urlopen("https://maps.googleapis.com/maps/api/geocode/json?%s" % params)
+    google = json.loads(f.read())
+    if google['status'] == 'ZERO_RESULTS':
+        return False
+    return google
+
 def getAddress(address):
     here = getHereAddress(address)
     if here:
         here['Response']['View'][0]['Result'][0]['Location']['NavigationPosition'][0].update({'status':True})
         return here['Response']['View'][0]['Result'][0]['Location']['NavigationPosition'][0]
+    google = getGoogleAddress(address)
+    if google:
+        return {'Latitude':google['results'][0]['geometry']['location']['lat'],\
+         'Longitude':google['results'][0]['geometry']['location']['lng'],\
+         'status':True}
     return False
  
 class HTTPRequestHandler(BaseHTTPRequestHandler):
